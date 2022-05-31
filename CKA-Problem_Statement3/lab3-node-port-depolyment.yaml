@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ps-3
+spec: {}
+status: {}
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-server-dep
+  namespace: ps-3
+  labels:
+    type: web-server-dep
+spec:
+  minReadySeconds: 20
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      type: web-server
+  template:
+    metadata:
+      labels: 
+        type: web-server
+    spec:
+      containers:
+        - name: nginx-server
+          image: nginx 
+          ports:
+            - containerPort: 80
+  replicas: 3
+status:
+  replicas: 3
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodeport-service
+  namespace: ps-3
+  labels:
+    type: web-server-svc
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      #targetPort: 80
+      nodePort: 30010
+  selector:
+    type: web-server
+  type: NodePort
+status:
+  loadBalancer: {}
+
+---
+
+# apiVersion: v1
+# kind: Pod
+# metadata:
+#   name: web-server-pod
+#   namespace: ps-3
+#   labels:
+#     type: web-server
+# spec:
+#   containers:
+#     - name: web-server
+#       image: nginx
+#       resources: {}
+#   restartPolicy: Always
+# status: {}   

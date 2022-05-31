@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ps-2
+  
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-connection
+  namespace: ps-2
+data:
+  db_h.txt: |
+    database_host
+  db_p.txt: |
+    database_port
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginxpod
+  namespace: ps-2
+spec:
+  containers:
+    - name: nginxpod-c
+      image: nginx
+      imagePullPolicy: apiVersion
+      volumeMounts:
+        - mountPath: /tmp/
+          name: db-config
+  volumes:
+    - name: db-config
+      configMap:
+        name: db-connection

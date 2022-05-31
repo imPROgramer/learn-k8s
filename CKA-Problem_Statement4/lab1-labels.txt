@@ -1,0 +1,2 @@
+kubectl run pod --image nginx --labels='Tier=Web'
+kubectl run pod --image nginx --labels='Tier=App'

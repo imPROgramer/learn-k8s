@@ -1,0 +1,45 @@
+          ###
+# sudo adduser cluster-user-secretadmin
+###
+
+apiVersion: certificates.k8s.io/v1
+kind: CertificateSigningRequest
+metadata:
+  name: cluster-user-secretadmin
+spec:
+  groups:
+    - system:authenticted
+  request: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0KTUlJQ2JUQ0NBVlVDQVFBd0tERVZNQk1HQTFVRUF3d01ZMngxYzNSbGNpMTFjMlZ5TVE4d0RRWURWUVFLREFaawpaWFp2Y0hNd2dnRWlNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0SUJEd0F3Z2dFS0FvSUJBUURTbjFybThjckJyK3FSCk5MWDlQbW5zUks0RHlJVWlxVVlqMEFRVk9zb1BYNkJwYlRUOG8yT1VqdHJZaUxBVTFtcTRaaUt6NjUxZThJQjQKSXJqSlprRzdqbUJzUWJTcmliZlRtMXhmS2k3eWZiZnpUdVJDOFBweCs4YXpzMnFxUTg4aUxQLzRMTVpoNHV0cQpYeituTEdtMU9LWXF6M1FuSTkvS2UrT3VqRUIwN0pMVlFaT1JFRlBEWG9SbHlRZG9PczBzOHdYZmF6NnhsYk4rCmNiSitZWEM4MFlYZ3h1T2lDcE0rd0lydlp6bEp1L2lBZjIweEV3RW9rTDZ2bmU4TWpzL2JQdlo1RnNKRHoxaW4KNlhqbXpVTlpYdEVCdjRkeGNWL25PVEVxYllneXdHTTRGZDB6RlR1TzZlUnd0VUw0SGZCanY1N2IzN1JkdmtwegpQdkFSNXpSWEFnTUJBQUdnQURBTkJna3Foa2lHOXcwQkFRc0ZBQU9DQVFFQVEyaWxWcnY2WUxvSkZsTnNHTC9CCmc2ZWszTXp5WHZnSnNJaDZZRWdDRDBodEZwa20xRUdjZWJXbW5YYUlqdERsbmlMQmNYVkpFeVlIZ2hZdGRuVVoKUkYrTUREeUkxTFhpaU43M0RSTDBXVWp2cEE3N3ZnN3VlditaOEJ5b2g4QkZHaFJmODRlUGZXaTVtSVNEYitHbQpFdVB5ZGJxd2FzanYzS3hPbkVwQVYxMXN4dFVBeldwYUNONktLaGJDbS9vcTVhZ3E0VE94cWdOUWVVQkFVVU1pCjRycVhINitoaGw0dkpERXFUMWZlWEdkUHNXVTJCT05mcHM5YzVTRUVtUkJOT1ZTYmladHZLMDJZMzFtajJaMnUKcG9JZkRteG9NSVIrU3dSRDFXM0x4NzBoUSs2cW13UHlZRk5HeFF3YmZhbVZVeWxJaGZFV2hLOEtPWmFoRDJXSwpBUT09Ci0tLS0tRU5EIENFUlRJRklDQVRFIFJFUVVFU1QtLS0tLQo=
+  signerName: kubernetes.io/kube-apiserver-client
+  usages:
+    - client auth  
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cluster-role-secretadmin
+rules:
+  - verbs:
+      - get
+      - watch
+      - list
+    resources:
+      - pod
+    apiGroups:
+      - ""
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: rbac-test-sa
+roleRef:
+  apiGroup: ""
+  kind: ClusterRole
+  name: cluster-role-secretadmin
+subjects:
+  - kind: User
+    name: cluster-user-secretadmin

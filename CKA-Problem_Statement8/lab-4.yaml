@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ps-8
+
+---  
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: use-pv
+  namespace: ps-8
+spec:
+  containers:
+    - name: pv-pod
+      image: nginx
+      volumeMounts:
+        - mountPath: /mnt/readonly
+          name: gke-pv
+  volumes:
+    - name: gke-pv
+      persistentVolumeClaim:
+        claimName: gke-pvc  

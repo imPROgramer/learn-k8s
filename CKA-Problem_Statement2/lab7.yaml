@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ps-2
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: db-credentials
+  namespace: ps-2
+data:
+  db-username: dbuser
+  db-password: db-password

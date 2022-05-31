@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: nginx-web
+  labels:
+    type: custom-scheduled
+spec:
+  serviceAccountName: my-scheduler
+  containers:
+    - name: nginx-web
+      image: nginx
+      resources: {}
+  restartPolicy: Always
+status: {}

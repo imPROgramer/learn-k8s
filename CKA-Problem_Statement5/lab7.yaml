@@ -1,0 +1,14 @@
+apiVersion: apiserver.config.k8s.io/v1
+kind: EncryptionConfiguration
+resources:
+  - resources:
+    - secrets
+    providers:
+    - aescbc:
+        keys:
+        - name: key1
+          secret: QZCoJEcJrJJ0V71qwaZu8c5k+ZGzyLLjezk61ytm7E0=
+    - identity: {}
+
+
+#ETCDCTL_API=3 etcdctl --endpoints=10.182.0.2:2379 --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key get /registry/secrets/default/testsecret
